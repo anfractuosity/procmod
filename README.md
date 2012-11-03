@@ -1,4 +1,4 @@
-==ProcMod==
+# ProcMod v0.1
 
         
 * -p PROCID - Process ID to work on
