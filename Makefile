@@ -1,6 +1,5 @@
 CC=gcc
 CFLAGS=
-#-Xlint:unchecked
 
 all:
 	#indent -linux -brf main.c -cli8
