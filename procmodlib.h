@@ -34,6 +34,7 @@
 #endif
 
 void dumpprocess(int procid, char *file);
+int procreplace(int procid, char *find, int findlen, char *replace, int replacelen);
 
 
 #endif

@@ -13,7 +13,6 @@ void args() {
 
 int main(int argc, char **argv) {
 
-
 	int aflag = 0;
 	int bflag = 0;
 	char *cvalue = NULL;
@@ -34,7 +33,7 @@ int main(int argc, char **argv) {
 	char *replace = NULL;
 	char utf16 = 0;
 
-	while ((c = getopt(argc, argv, "d:b:c:p:f:u")) != -1)
+	while ((c = getopt(argc, argv, "d:b:c:p:f:ur:")) != -1)
 		switch (c) {
 			case 'd':
 				dump = optarg;
@@ -57,7 +56,7 @@ int main(int argc, char **argv) {
 				replace = optarg;
 				break;
 			case 'u':
-				utf16 = 1;		
+				utf16 = 1;
 				break;
 				/*case '?':
 				   if (optopt == 'c')
@@ -87,10 +86,12 @@ int main(int argc, char **argv) {
 		dumpprocess(procid, dump);
 	}
 
-	if(find && replace){
-		
-	}
+	if (find != NULL && replace != NULL) {
+		if (!utf16)
+			procreplace(procid, find, strlen(find), replace,
+				    strlen(replace));
 
+	}
 	//printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
 
 	//for (index = optind; index < argc; index++)
