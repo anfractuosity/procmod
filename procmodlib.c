@@ -181,7 +181,7 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 
 						int z = 0;
 
-						printf("POKING %d ALLOCED %d\n", mval,(replacelen/sizeof(WORD))+3);
+						printf("-------------- POKING\n");
 						for (z = 0; z < mval; z++) {
 							if (ptrace
 							    (PTRACE_POKETEXT,
