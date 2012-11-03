@@ -36,7 +36,7 @@ void printf16(char *str){
 	printf("\n");
 }
 
-int u16strlen(char *str){
+int u16bytes(char *str){
 	
 	int count = 0;
 
