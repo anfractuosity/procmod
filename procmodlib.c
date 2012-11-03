@@ -29,17 +29,6 @@ void replacebytes(char *haystack, char *replace, int replacelen) {
     int pos = 0;
     int i = 0;
     
-    // Find first 
-    /*for (i = 0; i < sizeof(WORD); i++) {
-        if (haystack[i] == needle[z]) {
-            if (z == 0)
-                pos = i;
-            z++;
-        } else
-            z = 0;
-    }*/
-
-    //printf("start: %d\nreplace %d\n", pos, u16strlen(needle));
     for (i = 0; i<replacelen; i++) {
         haystack[i] = replace[i];
     }
