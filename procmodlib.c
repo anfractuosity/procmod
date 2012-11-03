@@ -24,15 +24,10 @@
 
 
 void replacebytes(char *haystack, char *replace, int replacelen) {
-
-    int z = 0;
-    int pos = 0;
     int i = 0;
-    
     for (i = 0; i<replacelen; i++) {
         haystack[i] = replace[i];
     }
-
 }
 
 
@@ -133,9 +128,14 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 			continue;
 		}
 
+		// Don't attempt to write to read only memory
+		if(strstr(perm,"r--p"))
+			continue;	
+
 		WORD off = 0;
 		WORD start = 0;
 
+		
 		// 1 extra WORD because replacelen < 8 needs to give result of 1, and 2 extra words for good measure ;)
 		WORD mash[(replacelen/sizeof(WORD))+3];
 
@@ -145,6 +145,7 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 		int starti = 0;
 
 		for (; from < to; from += sizeof(WORD)) {
+
 			WORD tmp = ptrace(PTRACE_PEEKTEXT, procid, from, NULL);
 
 			if (tmp == -1)
@@ -156,8 +157,9 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 				}
 
 			int i = 0;
-			for (i = 0; i < 8; i++) {
-				if ((tmp >> (i * 8) & 0xFF) == find[pos]) {
+			for (i = 0; i < sizeof(WORD); i++) {
+
+				if (((tmp >> (i * 8)) & 0xFF) == find[pos]) {
 					// Matched charcter
 					if (pos == 0) {
 						start = from;
@@ -179,12 +181,12 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 
 						int z = 0;
 
-						printf("POKING %d\n", mval);
+						printf("POKING %d ALLOCED %d\n", mval,(replacelen/sizeof(WORD))+3);
 						for (z = 0; z < mval; z++) {
 							if (ptrace
 							    (PTRACE_POKETEXT,
 							     procid,
-							     start + (z * 8),
+							     start + (z * sizeof(WORD)),
 							     mash[z]) == -1) {
 								perror
 								    ("POKE failure");

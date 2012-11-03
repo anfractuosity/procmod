@@ -20,11 +20,15 @@ char * asciitou16(char *ascii){
 }
 
 void print_u16(char *str){
+
         int i = 0;
-        for(i=1;i<u16bytes(str);i+=2){
+        
+	for(i=1;i<u16bytes(str);i+=2){
                 printf("%c",str[i]);
         }
-        printf("\n");
+        
+	printf("\n");
+
 }
 
 int u16bytes(char *str){
