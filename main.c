@@ -1,4 +1,5 @@
 #include "procmodlib.h"
+#include "unicode.h"
 
 void args() {
 
@@ -90,6 +91,9 @@ int main(int argc, char **argv) {
 		if (!utf16)
 			procreplace(procid, find, strlen(find), replace,
 				    strlen(replace));
+		else
+			procreplace(procid, asciitou16(find), strlen(find), asciitou16(replace),
+		                                    strlen(replace));
 
 	}
 	//printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);
