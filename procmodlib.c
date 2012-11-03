@@ -135,7 +135,9 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 
 		WORD off = 0;
 		WORD start = 0;
-		WORD mash[100];
+
+		// 1 extra WORD because replacelen < 8 needs to give result of 1, and 2 extra words for good measure ;)
+		WORD mash[(replacelen/sizeof(WORD))+3];
 
 		
 		int pos = 0;
