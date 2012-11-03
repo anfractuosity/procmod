@@ -3,7 +3,7 @@ CFLAGS=
 #-Xlint:unchecked
 
 all:
-	indent -linux -brf main.c -cli8
+	#indent -linux -brf main.c -cli8
 	$(CC) $(CFLAGS) main.c -o procmod
 
 docs:
