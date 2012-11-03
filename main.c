@@ -91,9 +91,12 @@ int main(int argc, char **argv) {
 		if (!utf16)
 			procreplace(procid, find, strlen(find), replace,
 				    strlen(replace));
-		else
-			procreplace(procid, asciitou16(find), strlen(find), asciitou16(replace),
-		                                    strlen(replace));
+		else{
+			char *f_ = asciitou16(find);
+			char *r_ = asciitou16(replace);;
+			procreplace(procid, f_, u16bytes(f_), r_,
+		                                    u16bytes(r_));
+		}
 
 	}
 	//printf("aflag = %d, bflag = %d, cvalue = %s\n", aflag, bflag, cvalue);

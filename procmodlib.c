@@ -107,7 +107,7 @@ void dumpprocess(int procid, char *file) {
 int procreplace(int procid, char *find, int findlen, char *replace,
 		int replacelen) {
 
-	printf("Dumping process....\n");
+	printf("Replacing bytes....\n");
 
 	char heappath[100];
 
