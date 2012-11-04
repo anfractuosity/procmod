@@ -4,5 +4,5 @@
 char * asciitou16(char *);
 void print_u16(char *);
 int u16bytes(char *);
-
+unsigned char * tobytes(char *);
 #endif

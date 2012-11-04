@@ -10,7 +10,8 @@ void args() {
 	-u        -- Convert find/replace parameters to UTF-16 (for JVM)\n\
         -d FILE   -- dumps process to file\n\
 	-l NUM    -- Lower bound of search\n\
-	-t NUM    -- Top bound of search\n");
+	-t NUM    -- Top bound of search\n\
+	-h 	  -- Hexadecimal find/replace strings\n");
 
 }
 
@@ -39,7 +40,9 @@ int main(int argc, char **argv) {
 	WORD lbound = 0;
 	WORD ubound = WORDMAX;
 
-	while ((c = getopt(argc, argv, "d:b:c:p:f:ur:l:t:")) != -1)
+	int hex = 0;
+
+	while ((c = getopt(argc, argv, "d:b:c:p:f:ur:l:t:h")) != -1)
 		switch (c) {
 			case 'd':
 				dump = optarg;
@@ -68,6 +71,9 @@ int main(int argc, char **argv) {
 			case 't':
 				ubound = TOWORD(optarg);
 				break;
+			case 'h':
+				hex = 1;
+				break;
 			default:
 				args();
 				abort();
@@ -85,10 +91,26 @@ int main(int argc, char **argv) {
 
 
 	if (find != NULL && replace != NULL) {
-		if (!utf16)
+		if (!utf16 && !hex){
 			procreplace(procid, find, strlen(find), replace,
 				    strlen(replace),lbound,ubound);
-		else{
+		} else if(hex){
+			char *f_ = tobytes(find);
+			char *r_ = tobytes(replace);
+
+		     	int fl = strlen(find) / 2;
+                        if(fl == 0)
+                                fl = 1;
+
+                        int rl = strlen(replace) / 2;
+                        if(rl == 0)
+                                rl = 1;
+
+
+			procreplace(procid, f_, fl, r_,
+			                           rl, lbound, ubound);
+
+		} else{
 			char *f_ = asciitou16(find);
 			char *r_ = asciitou16(replace);;
 			procreplace(procid, f_, u16bytes(f_), r_,
@@ -96,9 +118,19 @@ int main(int argc, char **argv) {
 		}
 
 	} else if(find){
-		if(!utf16)
+		if(!utf16 && !hex){
 			procreplace(procid,find,strlen(find),NULL,0,lbound,ubound);	
-		else{
+		
+		} else if(hex){
+                        unsigned char *f_ = tobytes(find);
+
+			int div2 = strlen(find) / 2;
+			if(div2 == 0)
+				div2 = 1;
+
+                        procreplace(procid,f_,div2,NULL,0,lbound,ubound);
+			
+		} else{
 		       char *f_ = asciitou16(find);
 		       procreplace(procid,f_,u16bytes(f_),NULL,0,lbound,ubound);
 		}

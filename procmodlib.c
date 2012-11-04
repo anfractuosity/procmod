@@ -89,7 +89,7 @@ void dumpprocess(int procid, char *file) {
 
 }
 
-int procreplace(int procid, char *find, int findlen, char *replace,
+int procreplace(int procid, unsigned char *find, int findlen, unsigned char *replace,
 		int replacelen, WORD lowerbound, WORD upperbound) {
 
 	printf("Finding bytes within 0x"WORDFORMAT " to 0x"WORDFORMAT "\n",lowerbound,upperbound);
@@ -171,9 +171,10 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 
 			int i = 0;
 			for (i = 0; i < sizeof(WORD); i++) {
-
+				//printf("%u\n",((tmp >> (i * 8)) & 0xFF));
 				if (((tmp >> (i * 8)) & 0xFF) == find[pos]) {
 					// Matched charcter
+					//
 					if (pos == 0) {
 						start = from;
 						starti = i;
