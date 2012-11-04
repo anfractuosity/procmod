@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 char * asciitou16(char *ascii){
 
         char * ret = calloc(1,(strlen(ascii)*2) + 2);
@@ -88,22 +89,39 @@ int tonum(char c){
 			return 15;
 		case 'F':
 			return 15;
+		default:
+			return -1;
 	}		
 
 }
 
 unsigned char * tobytes(char *hex){
-	unsigned char * out = malloc((strlen(hex)/2)+1);
+
+	unsigned int length = strlen(hex);
+	
+	// Check if even
+	if(length & 1 == 1){
+		return NULL;
+	}
+
+	unsigned char * out = malloc((length/2)+1);
 
 	int i = 0;
 	int v = 0;
 
 	for(i=0; i<strlen(hex);i+=2){
-		unsigned int val = tonum(hex[i])*16 + tonum(hex[i+1])*1;
-		out[v] = val;
+		int val = tonum(hex[i])*16 + tonum(hex[i+1])*1;
+	
+		if(val == -1){
+			free(out);
+			return NULL;
+		}
+
+		out[v] = (unsigned int)val;
 		v++;
 	}
 
 	return out;
+
 }
 

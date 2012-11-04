@@ -98,6 +98,11 @@ int main(int argc, char **argv) {
 			char *f_ = tobytes(find);
 			char *r_ = tobytes(replace);
 
+			if(!f_ || !r_){
+				printf("Hexadecimal must be even number of characters\n");
+				return;
+			}
+
 		     	int fl = strlen(find) / 2;
                         if(fl == 0)
                                 fl = 1;
@@ -123,7 +128,13 @@ int main(int argc, char **argv) {
 		
 		} else if(hex){
                         unsigned char *f_ = tobytes(find);
-
+			
+			if(!f_){	
+	                        printf("Hexadecimal must be even number of characters\n");
+				return;
+			}
+				
+				
 			int div2 = strlen(find) / 2;
 			if(div2 == 0)
 				div2 = 1;
