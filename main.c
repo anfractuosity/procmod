@@ -3,7 +3,7 @@
 
 void args() {
 
-	printf("ProcMod - v0.0\n\
+	printf("ProcMod - v0.1\n\
         -p PROCID -- Process ID to work on\n\
         -f        -- Text to find in the process\n\
         -r        -- Text to replace in the proces\n\
