@@ -19,6 +19,12 @@ Should compile fine on 32/64 bit architectures, simply by typing 'make'.
 * -u        - Convert find/replace parameters to UTF-16 (for JVM)
 * -d FILE   - dumps process to file
 
+## Example usage
+
+Search for the text HELLOWORLD in a firefox process, from the hex address 0x00007fef32000000`
+
+./procmod -p `pgrep firefox` -f HELLOWORLD -l `printf "%u" 0x00007fef32000000`
+
 ## Licence
 
 Licenced under GPL v2

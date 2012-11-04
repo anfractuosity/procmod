@@ -9,13 +9,14 @@
         int status;\
         int w = waitpid(procid, &status, WUNTRACED);\
         if (w == -1) {\
-                perror("Waitpid failure");\
-                exit(1);\
+                printf("Waitpid failure");\
+                return;\
         }\
         if (WIFSTOPPED(status)) {\
-                printf("OK\n");\
-        } else\
-                printf("NOT OK\n");\
+        } else {\
+		printf("Stop failure");\
+                return;\
+	}
 
 #define DETACH(procid) \
         ret = ptrace(PTRACE_DETACH, procid, NULL, 0);
@@ -89,9 +90,9 @@ void dumpprocess(int procid, char *file) {
 }
 
 int procreplace(int procid, char *find, int findlen, char *replace,
-		int replacelen) {
+		int replacelen, WORD lowerbound, WORD upperbound) {
 
-	printf("Replacing bytes....\n");
+	printf("Finding bytes within 0x"WORDFORMAT " to 0x"WORDFORMAT "\n",lowerbound,upperbound);
 
 	char heappath[100];
 
@@ -121,6 +122,17 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 		sscanf(string, WORDFORMAT "-" WORDFORMAT " %s ", &from, &to,
 		       &perm);
 
+		//if(from >= lowerbound && to <= upperbound){
+                //
+		//}else
+		//      continue;
+		if(from >= lowerbound && from <= upperbound 
+		 || to <= upperbound &&  to >= lowerbound){
+
+		} else 
+			continue;
+		
+
 		printf("FROM " WORDFORMAT " TO " WORDFORMAT " %s\n", from, to,
 		       perm);
 
@@ -131,6 +143,7 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 		// Don't attempt to write to read only memory
 		if(strstr(perm,"r--p"))
 			continue;	
+
 
 		WORD off = 0;
 		WORD start = 0;
@@ -175,22 +188,23 @@ int procreplace(int procid, char *find, int findlen, char *replace,
 
 					if (findlen == pos) {
 						printf
-						    ("-------------- FOUND\n");
+						    ("-------------- FOUND @ " WORDFORMAT "\n",start+starti);
+						if(replace){
+							replacebytes((char *)mash+starti,replace,replacelen);
 
-						replacebytes((char *)mash+starti,replace,replacelen);
+							int z = 0;
 
-						int z = 0;
-
-						printf("-------------- POKING\n");
-						for (z = 0; z < mval; z++) {
-							if (ptrace
-							    (PTRACE_POKETEXT,
-							     procid,
-							     start + (z * sizeof(WORD)),
-							     mash[z]) == -1) {
-								perror
-								    ("POKE failure");
-								return;
+							printf("-------------- POKING\n");
+							for (z = 0; z < mval; z++) {
+								if (ptrace
+								    (PTRACE_POKETEXT,
+								     procid,
+								     start + (z * sizeof(WORD)),
+								     mash[z]) == -1) {
+									perror
+									    ("POKE failure");
+									return;
+								}
 							}
 						}
 

@@ -8,12 +8,14 @@ void args() {
         -f        -- Text to find in the process\n\
         -r        -- Text to replace in the proces\n\
 	-u        -- Convert find/replace parameters to UTF-16 (for JVM)\n\
-        -d FILE   -- dumps process to file\n");
+        -d FILE   -- dumps process to file\n\
+	-l NUM    -- Lower bound of search\n\
+	-t NUM    -- Top bound of search\n");
 
 }
 
 int main(int argc, char **argv) {
-
+	
 	int aflag = 0;
 	int bflag = 0;
 	char *cvalue = NULL;
@@ -34,7 +36,10 @@ int main(int argc, char **argv) {
 	char *replace = NULL;
 	char utf16 = 0;
 
-	while ((c = getopt(argc, argv, "d:b:c:p:f:ur:")) != -1)
+	WORD lbound = 0;
+	WORD ubound = WORDMAX;
+
+	while ((c = getopt(argc, argv, "d:b:c:p:f:ur:l:t:")) != -1)
 		switch (c) {
 			case 'd':
 				dump = optarg;
@@ -57,6 +62,12 @@ int main(int argc, char **argv) {
 			case 'u':
 				utf16 = 1;
 				break;
+			case 'l':
+				lbound = TOWORD(optarg);	
+				break;
+			case 't':
+				ubound = TOWORD(optarg);
+				break;
 			default:
 				args();
 				abort();
@@ -71,17 +82,26 @@ int main(int argc, char **argv) {
 		dumpprocess(procid, dump);
 	}
 
+
+
 	if (find != NULL && replace != NULL) {
 		if (!utf16)
 			procreplace(procid, find, strlen(find), replace,
-				    strlen(replace));
+				    strlen(replace),lbound,ubound);
 		else{
 			char *f_ = asciitou16(find);
 			char *r_ = asciitou16(replace);;
 			procreplace(procid, f_, u16bytes(f_), r_,
-		                                    u16bytes(r_));
+		                                    u16bytes(r_), lbound, ubound);
 		}
 
+	} else if(find){
+		if(!utf16)
+			procreplace(procid,find,strlen(find),NULL,0,lbound,ubound);	
+		else{
+		       char *f_ = asciitou16(find);
+		       procreplace(procid,f_,u16bytes(f_),NULL,0,lbound,ubound);
+		}
 	}
 
 }
