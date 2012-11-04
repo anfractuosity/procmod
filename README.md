@@ -20,12 +20,19 @@ Should compile fine on 32/64 bit architectures, simply by typing 'make'.
 * -d FILE   - dumps process to file
 * -l NUM    - Lower bound of search
 * -t NUM    - Top bound of search
+* -h        - Hexadecimal find/replace strings
+
 
 ## Example usage
 
-Search for the text HELLOWORLD in a firefox process, from the hex address 0x00007fef32000000`
+Search for the text HELLOWORLD in a firefox process, from the hex address 0x00007fef32000000.
 
 ./procmod -p `pgrep firefox` -f HELLOWORLD -l `printf "%u" 0x00007fef32000000`
+
+
+Find the hexadecimal bytes 0xDEADBEEF in firefox.
+
+./procmod -p `pgrep firefox` -f "DEADBEEF" -h
 
 ## Licence
 
