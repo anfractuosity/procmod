@@ -18,6 +18,8 @@ Should compile fine on 32/64 bit architectures, simply by typing 'make'.
 * -r        - Text to replace in the proces
 * -u        - Convert find/replace parameters to UTF-16 (for JVM)
 * -d FILE   - dumps process to file
+* -l NUM    - Lower bound of search
+* -t NUM    - Top bound of search
 
 ## Example usage
 
