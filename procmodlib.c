@@ -126,12 +126,12 @@ int procreplace(int procid, unsigned char *find, int findlen, unsigned char *rep
                 //
 		//}else
 		//      continue;
-		if(from >= lowerbound && from <= upperbound 
+/*		if(from>= lowerbound && from <= upperbound 
 		 || to <= upperbound &&  to >= lowerbound){
 
 		} else 
 			continue;
-		
+*/		
 
 		printf("FROM " WORDFORMAT " TO " WORDFORMAT " %s\n", from, to,
 		       perm);
@@ -158,6 +158,14 @@ int procreplace(int procid, unsigned char *find, int findlen, unsigned char *rep
 		int starti = 0;
 
 		for (; from < to; from += sizeof(WORD)) {
+
+			   if(from >= lowerbound && from <= upperbound
+			                    || to <= upperbound &&  to >= lowerbound){
+
+		           } else
+			         continue;
+
+
 
 			WORD tmp = ptrace(PTRACE_PEEKTEXT, procid, from, NULL);
 
