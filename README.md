@@ -4,7 +4,7 @@
 
 Modifies running processes on linux.
 
-* Finds ASCII text or UTF-16 and replaces it with alternative text
+* Finds ASCII/UTF-16/binary and replaces it appropiately
 * Dumps processes to disk
 
 ## Compilation
