@@ -23,7 +23,9 @@
 
 
 
-
+/*
+  Replace bytes with alternatives 
+*/
 void replacebytes(char *haystack, char *replace, int replacelen) {
     int i = 0;
     for (i = 0; i<replacelen; i++) {
