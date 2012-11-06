@@ -66,7 +66,7 @@ void dumpprocess(int procid, char *file) {
 		char perm[10];
 
 		sscanf(string, WORDFORMAT "-" WORDFORMAT " %s ", &from, &to,
-		       &perm);
+		       perm);
 
 		printf("FROM " WORDFORMAT " TO " WORDFORMAT " %s\n", from, to,
 		       perm);
@@ -120,7 +120,7 @@ int procreplace(int procid, unsigned char *find, int findlen, unsigned char *rep
 		char perm[10];
 
 		sscanf(string, WORDFORMAT "-" WORDFORMAT " %s ", &from, &to,
-		       &perm);
+		       perm);
 
 		//if(from >= lowerbound && to <= upperbound){
                 //
@@ -172,7 +172,7 @@ int procreplace(int procid, unsigned char *find, int findlen, unsigned char *rep
 			if (tmp == -1)
 				if (errno != 0) {
 					printf
-					    ("Can't read --------------------  %016llx\n",
+					    ("Can't read --------------------" WORDFORMAT "\n",
 					     from);
 					return -1;
 				}
