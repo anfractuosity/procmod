@@ -16,7 +16,7 @@ void args() {
 }
 
 int main(int argc, char **argv) {
-	
+
 	int aflag = 0;
 	int bflag = 0;
 	char *cvalue = NULL;
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 				utf16 = 1;
 				break;
 			case 'l':
-				lbound = TOWORD(optarg);	
+				lbound = TOWORD(optarg);
 				break;
 			case 't':
 				ubound = TOWORD(optarg);
@@ -88,61 +88,61 @@ int main(int argc, char **argv) {
 		dumpprocess(procid, dump);
 	}
 
-
-
 	if (find != NULL && replace != NULL) {
-		if (!utf16 && !hex){
+		if (!utf16 && !hex) {
 			procreplace(procid, find, strlen(find), replace,
-				    strlen(replace),lbound,ubound);
-		} else if(hex){
+				    strlen(replace), lbound, ubound);
+		} else if (hex) {
 			char *f_ = tobytes(find);
 			char *r_ = tobytes(replace);
 
-			if(!f_ || !r_){
-				printf("Hexadecimal must be even number of characters\n");
+			if (!f_ || !r_) {
+				printf
+				    ("Hexadecimal must be even number of characters\n");
 				return;
 			}
 
-		     	int fl = strlen(find) / 2;
-                        if(fl == 0)
-                                fl = 1;
+			int fl = strlen(find) / 2;
+			if (fl == 0)
+				fl = 1;
 
-                        int rl = strlen(replace) / 2;
-                        if(rl == 0)
-                                rl = 1;
+			int rl = strlen(replace) / 2;
+			if (rl == 0)
+				rl = 1;
 
+			procreplace(procid, f_, fl, r_, rl, lbound, ubound);
 
-			procreplace(procid, f_, fl, r_,
-			                           rl, lbound, ubound);
-
-		} else{
+		} else {
 			char *f_ = asciitou16(find);
 			char *r_ = asciitou16(replace);;
 			procreplace(procid, f_, u16bytes(f_), r_,
-		                                    u16bytes(r_), lbound, ubound);
+				    u16bytes(r_), lbound, ubound);
 		}
 
-	} else if(find){
-		if(!utf16 && !hex){
-			procreplace(procid,find,strlen(find),NULL,0,lbound,ubound);	
-		
-		} else if(hex){
-                        unsigned char *f_ = tobytes(find);
-				
-			if(!f_){	
-	                        printf("Hexadecimal must be even number of characters\n");
+	} else if (find) {
+		if (!utf16 && !hex) {
+			procreplace(procid, find, strlen(find), NULL, 0, lbound,
+				    ubound);
+
+		} else if (hex) {
+			unsigned char *f_ = tobytes(find);
+
+			if (!f_) {
+				printf
+				    ("Hexadecimal must be even number of characters\n");
 				return;
 			}
-			
+
 			int div2 = strlen(find) / 2;
-			if(div2 == 0)
+			if (div2 == 0)
 				div2 = 1;
 
-                        procreplace(procid,f_,div2,NULL,0,lbound,ubound);
-			
-		} else{
-		       char *f_ = asciitou16(find);
-		       procreplace(procid,f_,u16bytes(f_),NULL,0,lbound,ubound);
+			procreplace(procid, f_, div2, NULL, 0, lbound, ubound);
+
+		} else {
+			char *f_ = asciitou16(find);
+			procreplace(procid, f_, u16bytes(f_), NULL, 0, lbound,
+				    ubound);
 		}
 	}
 

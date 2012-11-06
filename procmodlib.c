@@ -21,21 +21,15 @@
 #define DETACH(procid) \
         ret = ptrace(PTRACE_DETACH, procid, NULL, 0);
 
-
-
 /*
   Replace bytes with alternatives 
 */
 void replacebytes(char *haystack, char *replace, int replacelen) {
-    int i = 0;
-    for (i = 0; i<replacelen; i++) {
-        haystack[i] = replace[i];
-    }
+	int i = 0;
+	for (i = 0; i < replacelen; i++) {
+		haystack[i] = replace[i];
+	}
 }
-
-
-
-
 
 void dumpprocess(int procid, char *file) {
 	printf("Dumping process....\n");
@@ -91,10 +85,12 @@ void dumpprocess(int procid, char *file) {
 
 }
 
-int procreplace(int procid, unsigned char *find, int findlen, unsigned char *replace,
-		int replacelen, WORD lowerbound, WORD upperbound) {
+int procreplace(int procid, unsigned char *find, int findlen,
+		unsigned char *replace, int replacelen, WORD lowerbound,
+		WORD upperbound) {
 
-	printf("Finding bytes within 0x"WORDFORMAT " to 0x"WORDFORMAT "\n",lowerbound,upperbound);
+	printf("Finding bytes within 0x" WORDFORMAT " to 0x" WORDFORMAT "\n",
+	       lowerbound, upperbound);
 
 	char heappath[100];
 
@@ -124,58 +120,41 @@ int procreplace(int procid, unsigned char *find, int findlen, unsigned char *rep
 		sscanf(string, WORDFORMAT "-" WORDFORMAT " %s ", &from, &to,
 		       perm);
 
-		//if(from >= lowerbound && to <= upperbound){
-                //
-		//}else
-		//      continue;
-/*		if(from>= lowerbound && from <= upperbound 
-		 || to <= upperbound &&  to >= lowerbound){
-
-		} else 
-			continue;
-*/		
-
 		printf("FROM " WORDFORMAT " TO " WORDFORMAT " %s\n", from, to,
 		       perm);
 
 		if (strstr(perm, "---p")) {
 			continue;
 		}
-
 		// Don't attempt to write to read only memory
-		if(strstr(perm,"r--p"))
-			continue;	
-
+		if (strstr(perm, "r--p"))
+			continue;
 
 		WORD off = 0;
 		WORD start = 0;
 
-		
 		// 1 extra WORD because replacelen < 8 needs to give result of 1, and 2 extra words for good measure ;)
-		WORD mash[(replacelen/sizeof(WORD))+3];
+		WORD mash[(replacelen / sizeof(WORD)) + 3];
 
-		
 		int pos = 0;
 		int mval = 0;
 		int starti = 0;
 
 		for (; from < to; from += sizeof(WORD)) {
 
-			   if(from >= lowerbound && from <= upperbound
-			                    || to <= upperbound &&  to >= lowerbound){
+			if (from >= lowerbound && from <= upperbound
+			    || to <= upperbound && to >= lowerbound) {
 
-		           } else
-			         continue;
-
-
+			} else
+				continue;
 
 			WORD tmp = ptrace(PTRACE_PEEKTEXT, procid, from, NULL);
 
 			if (tmp == -1)
 				if (errno != 0) {
 					printf
-					    ("Can't read --------------------" WORDFORMAT "\n",
-					     from);
+					    ("Can't read --------------------"
+					     WORDFORMAT "\n", from);
 					return -1;
 				}
 
@@ -192,26 +171,39 @@ int procreplace(int procid, unsigned char *find, int findlen, unsigned char *rep
 
 					pos++;
 
-					if (i == sizeof(WORD)-1 || findlen == pos) {
+					if (i == sizeof(WORD) - 1
+					    || findlen == pos) {
 						mash[mval] = tmp;
 						mval++;
 					}
 
 					if (findlen == pos) {
 						printf
-						    ("-------------- FOUND @ " WORDFORMAT "\n",start+starti);
-						if(replace){
-							replacebytes((char *)mash+starti,replace,replacelen);
+						    ("-------------- FOUND @ "
+						     WORDFORMAT "\n",
+						     start + starti);
+						if (replace) {
+							replacebytes((char *)
+								     mash +
+								     starti,
+								     replace,
+								     replacelen);
 
 							int z = 0;
 
-							printf("-------------- POKING\n");
-							for (z = 0; z < mval; z++) {
+							printf
+							    ("-------------- POKING\n");
+							for (z = 0; z < mval;
+							     z++) {
 								if (ptrace
 								    (PTRACE_POKETEXT,
 								     procid,
-								     start + (z * sizeof(WORD)),
-								     mash[z]) == -1) {
+								     start +
+								     (z *
+								      sizeof
+								      (WORD)),
+								     mash[z]) ==
+								    -1) {
 									perror
 									    ("POKE failure");
 									return;
