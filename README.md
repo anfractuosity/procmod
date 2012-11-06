@@ -36,6 +36,9 @@ Find the hexadecimal bytes 0xDEADBEEF in firefox.
 
 ## Problems
 
+If you find it can't attach to a process, this could be because the process
+is running as a different user.  The ptrace system call can only trace your own processes.
+
 If you're running a Grsecurity kernel with "Configuration option: CONFIG_GRKERNSEC_PROC_MEMMAP" enabled
 then you will find that most of the addresses in /proc/PROCESSID/maps are null.  This is because:
 
