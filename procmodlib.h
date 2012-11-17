@@ -22,7 +22,6 @@
 #include <limits.h>
 #include <stdint.h>
 
-
 #if defined(__ILP32__)
         #define WORD uint32_t
         #define WORDFORMAT "%08x"
@@ -33,9 +32,16 @@
         #define WORDFORMAT "%016lx"
 	#define WORDMAX 0xFFFFFFFFFFFFFFFF
 	#define TOWORD(x) strtoul(x,NULL,10)
+#elif __SIZEOF_POINTER__ == 4
+        #define WORD uint32_t
+        #define WORDFORMAT "%08x"
+        #define WORDMAX 0xFFFFFFFF
+        #define TOWORD(x) strtoul(x,NULL,10)
 #else	
         #error Unsupported architecture
 #endif
+
+
 
 void dumpprocess(int procid, char *file);
 int procreplace(int procid, unsigned char *find, int findlen, unsigned char *replace,
