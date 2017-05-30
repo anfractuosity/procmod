@@ -44,6 +44,9 @@ then you will find that most of the addresses in /proc/PROCESSID/maps are null. 
 
 "If you say Y here, the /proc/<pid>/maps and /proc/<pid>/stat files will give no information about the addresses of its mappings if PaX features that rely on random addresses are enabled on the task. If you use PaX it is greatly recommended that you say Y here as it closes up a hole that makes the full ALSR useless for suid binaries."
 
+## Usage 
+
+Please see https://www.anfractuosity.com/projects/procmod/ for a simple example modifying a Java program.
 
 ## Licence
 
